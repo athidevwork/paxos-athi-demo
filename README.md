@@ -1,6 +1,10 @@
 # paxos-athi-demo
 
 paxos-athi-demo is a springboot application that implements 3 challenges from FullStack Engineer Challenges.
+
+
+## Assumptions
+Java and Maven are pre installed in the system where this project can be run.
  
 ## To Build And run demo
 >*** mvn spring-boot:run***
