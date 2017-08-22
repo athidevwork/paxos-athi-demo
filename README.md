@@ -1,6 +1,6 @@
 # paxos-athi-demo
 
-paxos-athi-demo is a springboot application that implements 3 challenges from FullStack Engineer Challenges.
+paxos-athi-demo is a springboot application that implements 3 challenges from FullStack Engineer and Blockchain Engineer Challenges.
 
 
 ## Assumptions
@@ -51,3 +51,13 @@ Print possible combinations of X with 0 and 1 from the pattern string as input.
 >curl -s -X GET http://localhost:8080/replaceX/10X10X0
 
 Big O notation for the program : O(n log n)
+
+
+------------------------------------------------------------------------
+### Challenge 2
+Print the hexadecimal bitcoin transaction to json
+
+#### To test for the end points for Challenge 2
+>curl -s -X GET http://localhost:8080/printBitcoinTxn/0100000001d8be4b8f39670aec2024f6e6fe1b4a7a3009eb91c12f141a25eab7a77a2760f5000000006b483045022100bd6027b4015c3701bd2ba949af4cdd16bd88a15a5a6bb39b06aa77967d2182ac02202b7175221b90dfc67fa402e25f963b6459a9aa6259b10c7b0fbb0cce764ecac60121027b13af064c43cee9dac1c1010e2e1f55a17363c161d0b9017ad6dff4aee2f0b1ffffffff0240634715000000001976a9143ba02668541a203b88a8fa87e3b9655d95700a1488acf5760a08000000001976a914eb591b4a5485656f72fa2dee496821611b33a85888ac00000000
+
+------------------------------------------------------------------------

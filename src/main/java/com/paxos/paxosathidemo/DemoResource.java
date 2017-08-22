@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.DatatypeConverter;
 
 import org.springframework.stereotype.Component;
 
@@ -59,6 +62,43 @@ public class DemoResource {
 		List<String> messagesList = new ArrayList<String>(hashMap.values());
 		logger.info(messagesList.toString());
 		return Response.ok().type(MediaType.TEXT_PLAIN).entity(messagesList).build();
+	}
+
+	@GET
+	@Path("/printBitcoinTxn/{txn}")
+	public String printBitcoinTxn(@PathParam("txn") String txn) {
+		logger.info("Transaction : " + txn);
+		byte[] parsedTxn = DatatypeConverter.parseHexBinary(txn);
+				
+		logger.info("\nprint: " + DatatypeConverter.printBase64Binary(parsedTxn));
+		
+		//logger.info("\nBase64:" + DatatypeConverter.parseBase64Binary(txn));
+		//logger.info("\nprinttest: " + DatatypeConverter.parseHexBinary(DatatypeConverter.printBase64Binary(parsedTxn)));
+		
+		String bitcoinTxn = null;
+		try {
+			bitcoinTxn = new String(parsedTxn, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		logger.info("\nFirst: " + bitcoinTxn);
+		
+		byte[] bytes = hexStringToByteArray(txn);
+		String st = new String(bytes,StandardCharsets.UTF_8);
+		System.out.println(st);
+		logger.info("\nTest: " + st);
+		
+		return null;
+	}
+	
+	public static byte[] hexStringToByteArray(String hex) {
+	    int l = hex.length();
+	    byte[] data = new byte[l/2];
+	    for (int i = 0; i < l; i += 2) {
+	        data[i/2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
+	                             + Character.digit(hex.charAt(i+1), 16));
+	    }
+	    return data;
 	}
 	
 	@GET
