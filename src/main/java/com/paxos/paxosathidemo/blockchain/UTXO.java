@@ -5,13 +5,10 @@ public class UTXO {
 	DepositMode depositMode;
 	double amount;
 	
-	//List<Double> amountList = new LinkedList<Double>();
-	
 	public UTXO(String accountName, DepositMode depositMode, double amount) {
 		this.accountName = accountName;
 		this.depositMode = depositMode;
 		this.amount = amount;
-		//amountList.add(amount);
 	}
 
 	public String getAccountName() {
@@ -38,25 +35,32 @@ public class UTXO {
 		this.amount = amount;
 	}
 
-	
-	/*public void getBalance() {
-		double balance = 0;
-		for (Double amount : amountList) {
-			balance += amount;
-		}
-		System.out.println("Account " + accountName + " : " + balance);
-	}
-	
-	public void addUTXO(double amount) {
-		amountList.add(amount);
-	}
-
-	public void debit(double amount) {
-		amountList.add(-amount);
-		
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((accountName == null) ? 0 : accountName.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(amount);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((depositMode == null) ? 0 : depositMode.hashCode());
+		return result;
 	}
 
-	public void credit(double amount) {
-		amountList.add(amount);
-	}*/
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UTXO other = (UTXO) obj;
+		if (accountName == null) {
+			if (other.accountName != null)
+				return false;
+		} else if (!accountName.equals(other.accountName))
+			return false;
+		return true;
+	}
 }

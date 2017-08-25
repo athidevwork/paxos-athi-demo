@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,6 +36,8 @@ public class DemoResource {
 	Logger logger = Logger.getLogger("DemoResource");
 	HashMap<String, String> hashMap = new HashMap<String, String>();
 	static TreeMap<String, Double> pricesMap = new TreeMap<String, Double>();
+	 public static final char[] ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz".toCharArray();
+	  private static final char ENCODED_ZERO = ALPHABET[0];
 	
 	static {
 		try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/prices.txt"))) {
@@ -68,6 +71,12 @@ public class DemoResource {
 	@Path("/printBitcoinTxn/{txn}")
 	public String printBitcoinTxn(@PathParam("txn") String txn) {
 		logger.info("Transaction : " + txn);
+		
+		logger.info(fromHexStringAthi(txn));
+		//logger.info("TEST1:" + fromHexString1(txn));
+		//int test = Integer.parseUnsignedInt(txn, 16);
+		logger.info("Test = " + DatatypeConverter.parseHexBinary(txn));
+		
 		byte[] parsedTxn = DatatypeConverter.parseHexBinary(txn);
 				
 		logger.info("\nprint: " + DatatypeConverter.printBase64Binary(parsedTxn));
@@ -86,12 +95,87 @@ public class DemoResource {
 		byte[] bytes = hexStringToByteArray(txn);
 		String st = new String(bytes,StandardCharsets.UTF_8);
 		System.out.println(st);
-		logger.info("\nTest: " + st);
+		logger.info("\nreal Test: " + st);
 		
 		return null;
 	}
 	
-	public static byte[] hexStringToByteArray(String hex) {
+	public static String fromHexStringAthi(String hex) {
+	    StringBuilder str = new StringBuilder();
+	    for (int i = 0; i < hex.length(); i+=2) {
+	        str.append((char) Integer.parseInt(hex.substring(i, i + 2), 16));
+	    }
+	    return str.toString();
+	}
+	
+	/**
+	   * return original string
+	   * @param encoded word
+	   * @return original word
+	   */
+	  public String decode(String str) {
+	    
+	    int decimal = 0;
+	    
+	    // restore decimal.
+	    char []chars = str.toCharArray();
+	    for (int i = 0; i < chars.length; i++) {
+	      char temp_c = chars[i];
+	      
+	      int index_num = 0;
+	      for (int j = 0; j < ALPHABET.length; j++) {
+	        if (ALPHABET[j] == temp_c) {
+	          index_num = j;
+	        }
+	      }
+	      
+	      decimal = decimal*58;
+	      decimal = decimal + index_num;
+	    }
+	    
+	    // Decimal → Hex
+	    String s_hex = Integer.toHexString((int)decimal);
+	    
+	    // Hex → string
+	    byte[] bytes = DatatypeConverter.parseHexBinary(s_hex);
+	    return new String(bytes);
+	  }
+	  
+	public static byte[] hexStringToByteArray(String s) {
+	    byte[] b = new byte[s.length() / 2];
+	    for (int i = 0; i < b.length; i++) {
+	      int index = i * 2;
+	      int v = Integer.parseInt(s.substring(index, index + 2), 16);
+	      b[i] = (byte) v;
+	    }
+	    return b;
+	  }
+	
+	public static final byte[] fromHexString1(final String s) {
+	    byte[] arr = new byte[s.length()/2];
+	    for ( int start = 0; start < s.length(); start += 2 )
+	    {
+	        String thisByte = s.substring(start, start+2);
+	        arr[start/2] = Byte.parseByte(thisByte, 16);
+	    }
+	    return arr;
+	}
+	
+	private static byte[] fromHexString(final String encoded) {
+	    if ((encoded.length() % 2) != 0)
+	        throw new IllegalArgumentException("Input string must contain an even number of characters");
+
+	    final byte result[] = new byte[encoded.length()/2];
+	    final char enc[] = encoded.toCharArray();
+	    for (int i = 0; i < enc.length; i += 2) {
+	        StringBuilder curr = new StringBuilder(2);
+	        curr.append(enc[i]).append(enc[i + 1]);
+	        result[i/2] = (byte) Integer.parseInt(curr.toString(), 16);
+	    }
+	    return result;
+	}
+	
+	public static byte[] hexStringToByteArrayold(String hex) {
 	    int l = hex.length();
 	    byte[] data = new byte[l/2];
 	    for (int i = 0; i < l; i += 2) {
