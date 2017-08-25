@@ -69,6 +69,7 @@ Design a ledger to capture transaction
 
 ##### Sample output from ledger
 
+```
 Adding amount 0.0 to account A
 Adding amount 0.0 to account B
 Adding amount 0.0 to account C
@@ -108,3 +109,4 @@ C : CREDIT, 100.0
 ----------------------------------------------
 Ledger Balances : {A=400.0, B=200.0, C=100.0}
 ----------------------------------------------
+```
